@@ -32,15 +32,6 @@ We are committed to building solutions that support long-term, sustainable busin
 
 We provide honest, unbiased guidance that prioritizes our customers' best interests. Our recommendations are driven by what works best for each unique situation, not by vendor relationships or hidden agendas.
 
-## What We Do
-
-Termina One delivers comprehensive **sellables** across four key categories:
-
-- **Products**: Tangible technology solutions that solve specific business challenges
-- **Solutions**: Comprehensive offerings tailored to address complex, multi-faceted customer needs
-- **Services**: Expert consultation, implementation, and support services that guide businesses through their digital transformation
-- **Platforms**: Self-service foundational systems that enable customers to build, deploy, and scale their own solutions
-
 ## Our Commitment
 
 We are dedicated to:
