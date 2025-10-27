@@ -16,6 +16,17 @@
         color: rgba(0, 0, 0, 0);
       }
 
+      /* link hover color */
+      a:hover {
+        color: black;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        a:hover {
+          color: white;
+        }
+      }
+
       /* dark mode */
       @media (prefers-color-scheme: dark) {
         html {
@@ -43,7 +54,6 @@
       href="https://github.com/zuedev/termina-one/blob/main/LICENSE"
       target="_blank"
       rel="noopener noreferrer"
-      style="text-decoration: none; color: inherit"
     >
       <p>🅮 Unburdened from copyright</p>
     </a>
