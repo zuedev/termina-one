@@ -1,7 +1,28 @@
+// Global audio context for error sounds
+let audioContext = null;
+let audioInitialized = false;
+
+// Initialize audio context on first user interaction
+function initializeAudio() {
+  if (!audioInitialized && !audioContext) {
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      audioInitialized = true;
+    } catch (e) {
+      console.warn("Audio context not supported");
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.body.style.userSelect = "none";
   document.body.style.webkitUserSelect = "none";
   document.body.style.webkitTouchCallout = "none";
+
+  // Initialize audio on any user interaction
+  document.addEventListener("click", initializeAudio, { once: true });
+  document.addEventListener("keydown", initializeAudio, { once: true });
+  document.addEventListener("touchstart", initializeAudio, { once: true });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "w") {
@@ -100,21 +121,32 @@ function warp() {
         // Use vibration instead of sound on mobile if available
         if (navigator.vibrate) {
           navigator.vibrate(200);
-        } else {
-          // Fallback to sound
-          const errorSoundContext = new AudioContext();
-          const oscillator = errorSoundContext.createOscillator();
-          const gainNode = errorSoundContext.createGain();
-          oscillator.type = "square";
-          oscillator.frequency.setValueAtTime(
-            440,
-            errorSoundContext.currentTime
-          );
-          gainNode.gain.setValueAtTime(0.1, errorSoundContext.currentTime);
-          oscillator.connect(gainNode);
-          gainNode.connect(errorSoundContext.destination);
-          oscillator.start();
-          oscillator.stop(errorSoundContext.currentTime + 0.2);
+        }
+
+        // Play error sound on desktop
+        if (audioContext && audioInitialized) {
+          try {
+            // Resume audio context if suspended (required by some browsers)
+            if (audioContext.state === "suspended") {
+              audioContext.resume();
+            }
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.type = "square";
+            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(
+              0.01,
+              audioContext.currentTime + 0.2
+            );
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.2);
+          } catch (e) {
+            console.warn("Failed to play error sound:", e);
+          }
         }
 
         setTimeout(() => {
@@ -129,7 +161,7 @@ function warp() {
 
     if (event.key === "Escape") {
       document.body.removeChild(warpInput);
-      document.body.removeChild(closeButton);
+      document.body.removeChild(overlay);
     }
   });
 
