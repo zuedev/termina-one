@@ -6,50 +6,23 @@
     <title>Termina One</title>
     <link rel="icon" type="image/png" href="assets/images/t1_logo.png" />
     <style>
-      @import url("https://cdn.jsdelivr.net/npm/@fontsource/monaspace-argon/index.css");
+      @import url("assets/styles/_global.css");
+      @import url("assets/styles/fadeInBody.css");
 
-      html {
-        font-family: "Monaspace Argon", monospace;
-      }
-
+      /* font size */
       body {
-        margin: 0;
-        padding: 1rem;
-        max-width: 666px;
         container-type: inline-size;
         font-size: 1.33cqh;
+      }
+
+      /* rainbow text */
+      body {
         background: url("assets/images/rainbow.png") no-repeat center/cover;
         background-clip: text;
         color: rgba(0, 0, 0, 0);
       }
 
-      h1:first-child {
-        margin-top: 0;
-      }
-
-      p {
-        text-align: justify;
-      }
-
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
-
-      /* fade in animation */
-      body {
-        animation: fadeIn 1s ease-in-out;
-      }
-
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-
+      /* dark mode */
       @media (prefers-color-scheme: dark) {
         html {
           background: black;
@@ -63,9 +36,9 @@
     </style>
     <script defer src="warp.js"></script>
   </head>
-  <body>
-    <h1>Termina One</h1>
-    <p>
+  <body style="padding: 1rem; max-width: 666px">
+    <h1 style="margin-top: 0">Termina One</h1>
+    <p style="text-align: justify">
       We deliver cutting-edge open-source technology solutions designed to
       empower the next generation of digital businesses. By combining
       innovation, scalability, and community-driven development, we create
@@ -76,6 +49,7 @@
       href="https://github.com/zuedev/termina-one/blob/main/LICENSE"
       target="_blank"
       rel="noopener noreferrer"
+      style="text-decoration: none; color: inherit"
     >
       <p>🅮 Unburdened from copyright</p>
     </a>
