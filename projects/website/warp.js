@@ -14,6 +14,75 @@ function initializeAudio() {
   }
 }
 
+// Play success sound
+function playSuccessSound() {
+  // Use vibration on mobile if available
+  if (navigator.vibrate) {
+    navigator.vibrate([100, 50, 100]); // Double vibration pattern
+  }
+
+  // Play success sound on desktop
+  if (audioContext && audioInitialized) {
+    try {
+      // Resume audio context if suspended (required by some browsers)
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.type = "sine"; // Smoother sound for success
+      oscillator.frequency.setValueAtTime(523, audioContext.currentTime); // C5 note
+      oscillator.frequency.setValueAtTime(659, audioContext.currentTime + 0.1); // E5 note
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioContext.currentTime + 0.3
+      );
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.3);
+    } catch (e) {
+      console.warn("Failed to play success sound:", e);
+    }
+  }
+}
+
+// Play error sound
+function playErrorSound() {
+  // Use vibration on mobile if available
+  if (navigator.vibrate) {
+    navigator.vibrate(200);
+  }
+
+  // Play error sound on desktop
+  if (audioContext && audioInitialized) {
+    try {
+      // Resume audio context if suspended (required by some browsers)
+      if (audioContext.state === "suspended") {
+        audioContext.resume();
+      }
+
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.type = "square";
+      oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(
+        0.01,
+        audioContext.currentTime + 0.2
+      );
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + 0.2);
+    } catch (e) {
+      console.warn("Failed to play error sound:", e);
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.body.style.userSelect = "none";
   document.body.style.webkitUserSelect = "none";
@@ -111,43 +180,26 @@ function warp() {
         ([name]) => name.toLowerCase() === query
       );
       if (location) {
-        window.location.href = location[1];
+        warpInput.value = "Redirecting...";
+        warpInput.style.background = "green";
+        warpInput.style.color = "white";
+        warpInput.disabled = true;
+
+        // Play success sound
+        playSuccessSound();
+
+        // Redirect after a short delay to show the feedback
+        setTimeout(() => {
+          window.location.href = location[1];
+        }, 800);
       } else {
         warpInput.value = "Invalid warp code...";
         warpInput.style.background = "red";
         warpInput.style.color = "white";
         warpInput.disabled = true;
 
-        // Use vibration instead of sound on mobile if available
-        if (navigator.vibrate) {
-          navigator.vibrate(200);
-        }
-
-        // Play error sound on desktop
-        if (audioContext && audioInitialized) {
-          try {
-            // Resume audio context if suspended (required by some browsers)
-            if (audioContext.state === "suspended") {
-              audioContext.resume();
-            }
-
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            oscillator.type = "square";
-            oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(
-              0.01,
-              audioContext.currentTime + 0.2
-            );
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.2);
-          } catch (e) {
-            console.warn("Failed to play error sound:", e);
-          }
-        }
+        // Play error sound
+        playErrorSound();
 
         setTimeout(() => {
           warpInput.style.background = "white";
