@@ -4,13 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Termina One</title>
+    <link rel="icon" type="image/png" href="assets/images/t1_logo.png" />
     <style>
       @import url("https://cdn.jsdelivr.net/npm/@fontsource/monaspace-argon/index.css");
 
       html {
         font-family: "Monaspace Argon", monospace;
-        background: black;
-        color: white;
       }
 
       body {
@@ -19,6 +18,9 @@
         max-width: 666px;
         container-type: inline-size;
         font-size: 1.33cqh;
+        background: url("assets/images/rainbow.png") no-repeat center/cover;
+        background-clip: text;
+        color: rgba(0, 0, 0, 0);
       }
 
       h1:first-child {
@@ -32,6 +34,17 @@
       a {
         text-decoration: none;
         color: inherit;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        html {
+          background: black;
+          color: white;
+        }
+
+        body {
+          color: rgba(255, 255, 255, 0.2);
+        }
       }
     </style>
     <script defer src="warp.js"></script>
